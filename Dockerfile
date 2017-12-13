@@ -26,8 +26,7 @@ RUN apt-get -qqy update \
     wget \
     curl \
     python \
-  && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
-  && sed -i 's/securerandom\.source=file:\/dev\/random/securerandom\.source=file:\/dev\/urandom/' ./usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 #===================
 # Timezone settings
@@ -38,17 +37,12 @@ RUN echo "${TZ}" > /etc/timezone \
   && dpkg-reconfigure --frontend noninteractive tzdata
 
 #========================================
-# Add normal user with passwordless sudo
+# Add user
 #========================================
-RUN useradd seluser \
-         --shell /bin/bash  \
-         --create-home \
-  && usermod -a -G sudo seluser \
-  && echo 'ALL ALL = (ALL) NOPASSWD: ALL' >> /etc/sudoers \
-  && echo 'seluser:secret' | chpasswd
+RUN useradd automation --shell /bin/bash --create-home
 
 
-USER root
+#USER root
 
 
 #==============
@@ -86,7 +80,7 @@ RUN wget --no-verbose -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geck
   && rm /tmp/geckodriver.tar.gz \
   && mv /opt/geckodriver /opt/geckodriver-$GECKODRIVER_VERSION \
   && chmod 755 /opt/geckodriver-$GECKODRIVER_VERSION \
-  && ln -fs /opt/geckodriver-$GECKODRIVER_VERSION /usr/bin/geckodriver
+  && ln -fs /opt/geckodriver-$GECKODRIVER_VERSION /usr/local/bin/geckodriver
 
 # Install Supervisor
 RUN curl -sS -o - https://bootstrap.pypa.io/ez_setup.py | python && \
@@ -96,12 +90,10 @@ RUN curl -sS -o - https://bootstrap.pypa.io/ez_setup.py | python && \
 ADD ./etc/supervisord.conf /etc/
 ADD ./etc/supervisor /etc/supervisor
 
-USER seluser
 
-# Running this command as sudo just to avoid the message:
-# To run a command as administrator (user "root"), use "sudo <command>". See "man sudo_root" for details.
-# When logging into the container
-RUN sudo echo ""
+# Default configuration
+ENV DISPLAY :20.0
+ENV SCREEN_GEOMETRY "1440x900x24"
 
 EXPOSE 4444
 
