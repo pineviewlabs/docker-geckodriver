@@ -18,8 +18,6 @@ ENV DEBIAN_FRONTEND=noninteractive \
 RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     bzip2 \
-    ca-certificates \
-    openjdk-8-jre-headless \
     tzdata \
     sudo \
     unzip \
@@ -51,7 +49,7 @@ RUN useradd automation --shell /bin/bash --create-home
 RUN apt-get update -qqy \
   && apt-get -qqy install \
     locales \
-    xvfb \
+    xvfb tinywm \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 
@@ -60,7 +58,7 @@ RUN apt-get update -qqy \
 #=========
 ARG FIREFOX_VERSION=57.0.2
 RUN apt-get update -qqy \
-  && apt-get -qqy --no-install-recommends install firefox \
+  && apt-get -qqy --no-install-recommends --no-check-certificate install firefox \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
   && wget --no-verbose -O /tmp/firefox.tar.bz2 https://download-installer.cdn.mozilla.net/pub/firefox/releases/$FIREFOX_VERSION/linux-x86_64/en-US/firefox-$FIREFOX_VERSION.tar.bz2 \
   && apt-get -y purge firefox \
