@@ -27,7 +27,6 @@ If you want to restrict the ports to your local environment, you can do so using
 docker run --name geckodriver -p 127.0.0.1::4444 docker-geckodriver:latest
 ```
 
-
-### Viewing the Logs
-
-Chromedriver logs can be found in `/var/log/supervisor/geckodriver.log`
+## Based on
+https://github.com/SeleniumHQ/docker-selenium/blob/master/Base/Dockerfile
+https://github.com/SeleniumHQ/docker-selenium/blob/master/NodeFirefox/Dockerfile
