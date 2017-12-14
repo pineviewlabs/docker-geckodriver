@@ -20,13 +20,12 @@ RUN apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install \
     bzip2 \
     ca-certificates \
-    openjdk-8-jre-headless \
     tzdata \
     sudo \
     unzip \
     wget \
-  && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
-  && sed -i 's/securerandom\.source=file:\/dev\/random/securerandom\.source=file:\/dev\/urandom/' ./usr/lib/jvm/java-8-openjdk-amd64/jre/lib/security/java.security
+    xvfb \
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
 
 #===================
 # Timezone settings
@@ -75,3 +74,19 @@ RUN wget --no-verbose -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geck
   && chmod 755 /opt/geckodriver-$GECKODRIVER_VERSION \
   && ln -fs /opt/geckodriver-$GECKODRIVER_VERSION /usr/bin/geckodriver
 
+
+COPY entry_point.sh /opt/bin/entry_point.sh
+
+RUN chmod 777 /opt/bin/entry_point.sh
+RUN chmod 777 /var/log/
+
+
+# Default configuration
+ENV DISPLAY :20.0
+ENV SCREEN_GEOMETRY "1440x900x24"
+
+USER seluser
+
+EXPOSE 4444
+
+CMD ["/opt/bin/entry_point.sh"]
