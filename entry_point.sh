@@ -15,7 +15,7 @@ rm -f /tmp/.X*lock
 SERVERNUM=$(get_server_num)
 
 xvfb-run -n $SERVERNUM  --server-args="-screen 0 $SCREEN_GEOMETRY -ac +extension RANDR" \
-    geckodriver -v &
+    geckodriver -v --host="0.0.0.0" &
 NODE_PID=$!
 
 trap shutdown SIGTERM SIGINT
