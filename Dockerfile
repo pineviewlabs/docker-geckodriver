@@ -50,7 +50,7 @@ USER root
 #=========
 # Firefox
 #=========
-ARG FIREFOX_VERSION=65.0.1
+ARG FIREFOX_VERSION=92.0.1
 RUN apt-get update -qqy \
   && apt-get -qqy --no-install-recommends --fix-missing install firefox \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
