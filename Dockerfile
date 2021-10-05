@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:bionic
 LABEL authors="Selenium <selenium-developers@googlegroups.com>"
 
 #================================================
